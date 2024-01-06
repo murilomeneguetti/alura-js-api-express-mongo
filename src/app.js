@@ -19,6 +19,11 @@ const livros = [
     }
 ]
 
+function buscaLivro(id) {
+    return livros.findIndex((livro) => livro.id === Number(id));
+    //return livros.filter((livro) => livro.id === Number(id));
+}
+
 //passando para o express a responsabilidade de gerenciar as rotas
 //.get é o método http para pegar dados
 app.get('/', (req, res) => {
@@ -32,6 +37,15 @@ app.get('/livros', (req, res) => {
     res.status(200).json(livros);
 })
 
+//configurando rota para consultar um livro específico
+//como o id do livro é variável, a rota fica com :id
+app.get('/livros/:id', (req, res) => {
+    //req.params pega os parametros da rota
+    const resultado = buscaLivro(req.params.id);
+    res.status(200).json(livros[resultado]);
+    //res.status(200).json(resultado);
+})
+
 //.post é o método http para criar dados
 app.post('/livros', (req, res) => {
     //incluindo novo livro na lista
@@ -41,5 +55,13 @@ app.post('/livros', (req, res) => {
     //status 201: registro criado
     res.status(201).send('livro cadastrado com sucesso!');
 });
+
+app.put('/livros/:id', (req, res) => {
+    const index = buscaLivro(req.params.id);
+    //altera o livro com o nome do titulo passado no corpo da requisição
+    livros[index].titulo = req.body.titulo;
+    //retorna todo o array livros
+    res.status(200).json(livros);
+})
 
 export default app;
