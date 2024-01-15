@@ -1,4 +1,18 @@
 import express from "express";
+import conectaNaDatabase from "./config/dbConnect.js";
+import livro from "./models/Livro.js"
+
+const conexao = await conectaNaDatabase();
+
+//método do mongoose para mostrar erro de conexão
+conexao.on('error', (erro) => {
+    console.error("erro de conexão", erro);
+});
+
+//método do mongoose para mostrar que a conexão foi feita
+conexao.once('open', () => {
+    console.log('Conexão com o banco feita com sucesso');
+});
 
 //executando e colocando o conjunto de código dentro da variavel app
 const app = express();
@@ -6,23 +20,6 @@ const app = express();
 //com express.json(), qualquer requisição que tenha como body um objeto compatível com json vai passar pelo middleware e convertido para json
 //conversão precisa ser feita pq os dados do body da requisição http chegam como string
 app.use(express.json());
-
-//simulando a base de dados com um array de objetos de livros
-const livros = [
-    {
-        id: 1,
-        titulo: 'O Senhor dos Anéis'
-    },
-    {
-        id: 2,
-        titulo: 'O Hobbit'
-    }
-]
-
-function buscaLivro(id) {
-    return livros.findIndex((livro) => livro.id === Number(id));
-    //return livros.filter((livro) => livro.id === Number(id));
-}
 
 //passando para o express a responsabilidade de gerenciar as rotas
 //.get é o método http para pegar dados
@@ -32,10 +29,12 @@ app.get('/', (req, res) => {
 });
 
 //rota livros
-app.get('/livros', (req, res) => {
+app.get('/livros', async (req, res) => {
+    //.find é um método do mongoose que vai se conectar com o banco mongo no atlas e vai buscar tudo que encontrar na coleção livros, pq nenhuma especificação foi passada dentro
+    const listaLivros = await livro.find({});
     //.json manda a resposta no formato json
-    res.status(200).json(livros);
-})
+    res.status(200).json(listaLivros);
+});
 
 //configurando rota para consultar um livro específico
 //como o id do livro é variável, a rota fica com :id
