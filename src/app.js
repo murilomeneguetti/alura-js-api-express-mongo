@@ -23,10 +23,10 @@ app.use(express.json());
 
 //passando para o express a responsabilidade de gerenciar as rotas
 //.get é o método http para pegar dados
-app.get('/', (req, res) => {
-    //.send manda informações mais simples, no caso um texto
-    res.status(200).send('Curso de Node.js');
-});
+// app.get('/', (req, res) => {
+//     //.send manda informações mais simples, no caso um texto
+//     res.status(200).send('Curso de Node.js');
+// });
 
 //rota livros
 app.get('/livros', async (req, res) => {
