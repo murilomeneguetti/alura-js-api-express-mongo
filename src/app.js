@@ -1,6 +1,6 @@
 import express from "express";
 import conectaNaDatabase from "./config/dbConnect.js";
-import livro from "./models/Livro.js"
+import routes from "./routes/index.js";
 
 const conexao = await conectaNaDatabase();
 
@@ -16,18 +16,8 @@ conexao.once('open', () => {
 
 //executando e colocando o conjunto de código dentro da variavel app
 const app = express();
-//middleware: são usados para ter acesso às requisições e respostas no momento em que elas estão sendo feitas e fazer ações nelas, como modificar objetos, etc
-//com express.json(), qualquer requisição que tenha como body um objeto compatível com json vai passar pelo middleware e convertido para json
-//conversão precisa ser feita pq os dados do body da requisição http chegam como string
-app.use(express.json());
-
-//app.get comentado porque foi feito com Controller e Routes
-//passando para o express a responsabilidade de gerenciar as rotas
-//.get é o método http para pegar dados
-// app.get('/', (req, res) => {
-//     //.send manda informações mais simples, no caso um texto
-//     res.status(200).send('Curso de Node.js');
-// });
+//enviando o nosso servidor express como parametro para as rotas
+routes(app);
 
 //rota livros
 app.get('/livros', async (req, res) => {
