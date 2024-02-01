@@ -21,6 +21,7 @@ const app = express();
 //conversão precisa ser feita pq os dados do body da requisição http chegam como string
 app.use(express.json());
 
+//app.get comentado porque foi feito com Controller e Routes
 //passando para o express a responsabilidade de gerenciar as rotas
 //.get é o método http para pegar dados
 // app.get('/', (req, res) => {

@@ -6,6 +6,7 @@ import livro from "../models/Livro.js";
 //controle vai ser uma classe com vários métodos dentro, um para cada operação
 class LivroController {
     
+    //usamos static quando queremos usar métodos de uma classe sem ter q instanciar ela. Não precisa criar um new LivroController para usar o método
     static async listarLivros (req, res) {
         const listaLivros = await livro.find({});
         //.send manda informações mais simples, no caso um texto
