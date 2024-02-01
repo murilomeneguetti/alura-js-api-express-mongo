@@ -19,12 +19,5 @@ const app = express();
 //enviando o nosso servidor express como parametro para as rotas
 routes(app);
 
-app.delete('/livros/:id', (req, res) => {
-    const index = buscaLivro(req.params.id);
-    //método splice deleta um elemento específico do array
-    //passamos como parametro o indice do elemento a ser removido e o número de elementos que queremos remover
-    livros.splice(index, 1);
-    res.status(200).send('livro removido com sucesso!');
-})
 
 export default app;
