@@ -1,6 +1,7 @@
 //dentro do livroController, vamos centralizar toda a lógica relacionada às ações que podem ser feitas em um livro (o que as rotas vão chamar para executar as operações e o manejo das requisições e das respostas correspondentes)
 
 //como o controlador faz uma interface entre as requisições e o que vai acontecer em casa requisição, precisamos passar a importação do modelo livro pra cá
+import { autor } from "../models/Autor.js";
 import livro from "../models/Livro.js";
 
 //controle vai ser uma classe com vários métodos dentro, um para cada operação
@@ -30,10 +31,14 @@ class LivroController {
 
     static async cadastrarLivro (req, res) {
         //usando try catch para manejar erros e sucessos
+        const novoLivro = req.body;
         try {
             //.create retorna o objeto que foi criado
-            const novoLivro = await livro.create(req.body);
-            res.status(201).json({ message: "criado com sucesso", livro: novoLivro });
+            //const novoLivro = await livro.create(req.body);
+            const autorEncontrado = await autor.findById(novoLivro.autor);
+            const livroCompleto = { ...novoLivro, autor: { ...autorEncontrado._doc } };
+            const livroCriado = await livro.create(livroCompleto)
+            res.status(201).json({ message: "criado com sucesso", livro: livroCriado });
         } catch (erro) {
             res.status(500).json({  message: `${erro.message} - falha ao cadastrar livro` })
         }
