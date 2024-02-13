@@ -39,8 +39,8 @@ class LivroController {
             const livroCompleto = { ...novoLivro, autor: { ...autorEncontrado._doc } };
             const livroCriado = await livro.create(livroCompleto)
             res.status(201).json({ message: "criado com sucesso", livro: livroCriado });
-        } catch (erro) {
-            res.status(500).json({  message: `${erro.message} - falha ao cadastrar livro` })
+        } catch (error) {
+            res.status(500).json({  message: `${error.message} - falha ao cadastrar livro` })
         }
     };
 
@@ -60,7 +60,18 @@ class LivroController {
             await livro.findByIdAndDelete(id);
             res.status(200).json({ message: 'livro excluido com sucesso' });
         } catch (error) {
-            res.status(500).json({ message: `${erro.message} - falha na execução` });
+            res.status(500).json({ message: `${error.message} - falha na execução` });
+        }
+    };
+
+    //busca por parametro
+    static async listarLivrosPorEditora (req, res) {
+        const varEditora = req.query.editora;
+        try {
+            const livrosPorEditora = await livro.find({ editora: varEditora });
+            res.status(200).json(livrosPorEditora);
+        } catch (error) {
+            res.status(500).json({ message: `${error.message} - falha na busca` });
         }
     };
     
